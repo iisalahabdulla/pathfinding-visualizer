@@ -30,29 +30,36 @@ async function startPathfinding() {
 
     startTime = performance.now();
 
-    switch (algorithm) {
-        case 'bfs':
-            pathFound = await bfs((visited) => visitedCells = visited);
-            break;
-        case 'dijkstra':
-            pathFound = await dijkstra((visited) => visitedCells = visited);
-            break;
-        case 'astar':
-            pathFound = await astar((visited) => visitedCells = visited);
-            break;
-    }
+    try {
+        switch (algorithm) {
+            case 'bfs':
+                pathFound = await bfs((visited) => visitedCells = visited);
+                break;
+            case 'dijkstra':
+                pathFound = await dijkstra((visited) => visitedCells = visited);
+                break;
+            case 'astar':
+                pathFound = await astar((visited) => visitedCells = visited);
+                break;
+            default:
+                throw new Error('Invalid algorithm selected');
+        }
 
-    endTime = performance.now();
-    executionTime = endTime - startTime;
+        endTime = performance.now();
+        executionTime = endTime - startTime;
 
-    if (pathFound) {
-        pathLength = calculatePathLength();
-    }
+        if (pathFound) {
+            pathLength = calculatePathLength();
+        }
 
-    displayAnalytics(algorithm, executionTime, visitedCells, pathLength, pathFound);
+        displayAnalytics(algorithm, executionTime, visitedCells, pathLength, pathFound);
 
-    if (!pathFound) {
-        alert('No path found!');
+        if (!pathFound) {
+            alert('No path found!');
+        }
+    } catch (error) {
+        console.error('An error occurred during pathfinding:', error);
+        alert('An error occurred during pathfinding. Please check the console for details.');
     }
 }
 
