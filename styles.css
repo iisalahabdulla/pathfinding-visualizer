@@ -6,6 +6,24 @@ body {
     padding: 20px;
 }
 
+#main-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+}
+
+#grid-container {
+    flex: 0 0 auto;
+    margin-right: 20px;
+}
+
+#sidebar {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+}
+
 #grid {
     display: grid;
     grid-gap: 1px;
@@ -47,6 +65,8 @@ body {
 
 #controls {
     margin-bottom: 20px;
+    width: 100%;
+    max-width: 1200px;
 }
 
 #controls > * {
@@ -54,6 +74,16 @@ body {
 }
 
 #algorithmInfo {
-    max-width: 600px;
-    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#analytics {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }

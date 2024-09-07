@@ -89,4 +89,21 @@ function isValidCell(row, col) {
     return row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE && !grid[row][col].element.classList.contains('wall');
 }
 
+function clearVisualization() {
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col < GRID_SIZE; col++) {
+            const cell = grid[row][col];
+            if (!cell.element.classList.contains('start') && 
+                !cell.element.classList.contains('end') && 
+                !cell.element.classList.contains('wall') &&
+                !cell.element.classList.contains('weighted')) {
+                cell.element.className = 'cell';
+            }
+        }
+    }
+    updateInfo();
+}
+
+window.clearVisualization = clearVisualization;
+
 createGrid();

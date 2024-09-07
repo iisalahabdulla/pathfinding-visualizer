@@ -8,7 +8,6 @@
 </head>
 <body>
     <h1>Pathfinding Visualizer</h1>
-    <div id="grid"></div>
     <div id="controls">
         <button id="startBtn">Start Pathfinding</button>
         <button id="resetBtn">Reset Grid</button>
@@ -25,11 +24,19 @@
         <input type="checkbox" id="diagonalMoves" checked>
         <label for="diagonalMoves">Allow Diagonal Moves</label>
     </div>
+    <div id="main-container">
+        <div id="grid-container">
+            <div id="grid"></div>
+        </div>
+        <div id="sidebar">
+            <div id="analytics"></div>
+            <div id="algorithmInfo"></div>
+        </div>
+    </div>
     <div id="info">
         <p>Cells visited: <span id="visitedCount">0</span></p>
         <p>Path length: <span id="pathLength">0</span></p>
     </div>
-    <div id="algorithmInfo"></div>
     
     <script src="js/grid.js"></script>
     <script src="js/algorithms.js"></script>
