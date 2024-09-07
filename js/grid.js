@@ -1,4 +1,5 @@
-const GRID_SIZE = 20; // Changed back to 50x50 grid
+const MAX_GRID_SIZE = 20; // Reduced from 50 to 30 for better visibility
+let GRID_SIZE = 20;
 let grid = [];
 let start = null;
 let end = null;
@@ -7,7 +8,14 @@ let currentDrawMode = null;
 
 function createGrid() {
     const gridElement = document.getElementById('grid');
-    gridElement.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 1.5rem)`; // 1.5rem = 24px
+    const gridContainer = document.getElementById('grid-container');
+    const containerWidth = gridContainer.clientWidth;
+    const isMobile = window.innerWidth < 640; // Tailwind's sm breakpoint
+    const cellSize = isMobile ? 20 : 25; // Slightly larger cells
+    GRID_SIZE = Math.min(Math.floor(containerWidth / cellSize), MAX_GRID_SIZE);
+
+    gridElement.style.gridTemplateColumns = `repeat(${GRID_SIZE}, ${cellSize}px)`;
+    gridElement.style.gridTemplateRows = `repeat(${GRID_SIZE}, ${cellSize}px)`;
     gridElement.innerHTML = '';
     grid = [];
 
@@ -16,15 +24,46 @@ function createGrid() {
         for (let col = 0; col < GRID_SIZE; col++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
+            cell.dataset.row = row;
+            cell.dataset.col = col;
             cell.addEventListener('mousedown', (e) => handleMouseDown(row, col, e));
             cell.addEventListener('mouseover', () => handleMouseOver(row, col));
             cell.addEventListener('mouseup', handleMouseUp);
+            cell.addEventListener('touchstart', (e) => handleTouchStart(row, col, e), { passive: false });
+            cell.addEventListener('touchmove', (e) => handleTouchMove(row, col, e), { passive: false });
+            cell.addEventListener('touchend', handleTouchEnd);
             gridElement.appendChild(cell);
             grid[row][col] = { element: cell, weight: 1 };
         }
     }
 
     document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('touchend', handleTouchEnd);
+}
+
+// Add touch event handlers
+function handleTouchStart(row, col, event) {
+    event.preventDefault();
+    isMouseDown = true;
+    handleCellClick(row, col);
+}
+
+function handleTouchMove(row, col, event) {
+    event.preventDefault();
+    if (isMouseDown && currentDrawMode !== null) {
+        const touch = event.touches[0];
+        const element = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (element && element.classList.contains('cell')) {
+            const cellRow = parseInt(element.dataset.row);
+            const cellCol = parseInt(element.dataset.col);
+            handleCellClick(cellRow, cellCol);
+        }
+    }
+}
+
+function handleTouchEnd() {
+    isMouseDown = false;
+    currentDrawMode = null;
 }
 
 function handleMouseDown(row, col, event) {
@@ -49,7 +88,13 @@ function handleMouseUp() {
 
 function handleCellClick(row, col) {
     const cell = grid[row][col];
-    if (!start) {
+    if (cell.element.classList.contains('start')) {
+        cell.element.classList.remove('start');
+        start = null;
+    } else if (cell.element.classList.contains('end')) {
+        cell.element.classList.remove('end');
+        end = null;
+    } else if (!start) {
         cell.element.classList.add('start');
         start = { row, col };
     } else if (!end) {
@@ -107,3 +152,4 @@ function clearVisualization() {
 window.clearVisualization = clearVisualization;
 
 createGrid();
+window.addEventListener('resize', createGrid);

@@ -7,34 +7,40 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
-<body class="font-sans p-5 flex flex-col items-center">
-    <h1 class="text-2xl mb-5">Pathfinding Visualizer</h1>
-    <div id="controls" class="mb-5 w-full max-w-5xl flex flex-wrap justify-center gap-2">
-        <button id="startBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Start Pathfinding</button>
-        <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Reset Grid</button>
-        <button id="generateMazeBtn" class="bg-purple-500 text-white px-4 py-2 rounded">Generate Maze</button>
-        <select id="algorithmSelect" class="px-4 py-2 rounded border border-gray-300">
+<body class="font-sans p-2 sm:p-5 flex flex-col items-center">
+    <h1 class="text-xl sm:text-2xl mb-3 sm:mb-5">Pathfinding Visualizer</h1>
+    <div id="controls" class="mb-3 sm:mb-5 w-full max-w-5xl flex flex-wrap justify-center gap-2">
+        <button id="startBtn" class="bg-blue-500 text-white px-2 py-1 sm:px-4 sm:py-2 rounded text-sm sm:text-base">Start Pathfinding</button>
+        <button id="resetBtn" class="bg-gray-500 text-white px-2 py-1 sm:px-4 sm:py-2 rounded text-sm sm:text-base">Reset Grid</button>
+        <button id="generateMazeBtn" class="bg-purple-500 text-white px-2 py-1 sm:px-4 sm:py-2 rounded text-sm sm:text-base">Generate Maze</button>
+        <select id="algorithmSelect" class="px-2 py-1 sm:px-4 sm:py-2 rounded border border-gray-300 text-sm sm:text-base">
             <option value="bfs">Breadth-First Search</option>
             <option value="dijkstra">Dijkstra's Algorithm</option>
             <option value="astar">A* Search</option>
         </select>
-        <input type="number" id="weightInput" min="1" max="9" value="1" class="w-16 px-2 py-2 rounded border border-gray-300">
-        <label for="weightInput" class="self-center">Weight</label>
-        <input type="range" id="speedSlider" min="1" max="100" value="50" class="w-32">
-        <label for="speedSlider" class="self-center">Speed</label>
-        <input type="checkbox" id="diagonalMoves" checked class="self-center">
-        <label for="diagonalMoves" class="self-center">Allow Diagonal Moves</label>
+        <div class="flex items-center">
+            <input type="number" id="weightInput" min="1" max="9" value="1" class="w-12 sm:w-16 px-1 sm:px-2 py-1 sm:py-2 rounded border border-gray-300 text-sm sm:text-base">
+            <label for="weightInput" class="ml-1 text-sm sm:text-base">Weight</label>
+        </div>
+        <div class="flex items-center">
+            <input type="range" id="speedSlider" min="1" max="100" value="50" class="w-24 sm:w-32">
+            <label for="speedSlider" class="ml-1 text-sm sm:text-base">Speed</label>
+        </div>
+        <div class="flex items-center">
+            <input type="checkbox" id="diagonalMoves" checked class="mr-1">
+            <label for="diagonalMoves" class="text-sm sm:text-base">Allow Diagonal Moves</label>
+        </div>
     </div>
-    <div id="main-container" class="flex justify-center w-full max-w-5xl">
-        <div id="grid-container" class="flex-none mr-5">
+    <div id="main-container" class="flex flex-col sm:flex-row justify-center w-full max-w-5xl">
+        <div id="grid-container" class="mb-3 sm:mb-0 sm:mr-5">
             <div id="grid" class="grid gap-px bg-gray-300 border border-gray-500"></div>
         </div>
-        <div id="sidebar" class="flex-none w-72 flex flex-col">
-            <div id="analytics" class="mb-5 p-3 border border-gray-300 rounded bg-gray-100"></div>
-            <div id="algorithmInfo" class="p-3 border border-gray-300 rounded bg-gray-100"></div>
+        <div id="sidebar" class="w-full sm:w-72 flex flex-col">
+            <div id="analytics" class="mb-3 sm:mb-5 p-2 sm:p-3 border border-gray-300 rounded bg-gray-100"></div>
+            <div id="algorithmInfo" class="p-2 sm:p-3 border border-gray-300 rounded bg-gray-100"></div>
         </div>
     </div>
-    <div id="info" class="mt-5 text-center">
+    <div id="info" class="mt-3 sm:mt-5 text-center text-sm sm:text-base">
         <p>Cells visited: <span id="visitedCount" class="font-bold">0</span></p>
         <p>Path length: <span id="pathLength" class="font-bold">0</span></p>
     </div>

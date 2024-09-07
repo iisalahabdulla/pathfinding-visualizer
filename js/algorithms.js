@@ -162,6 +162,15 @@ class BinaryHeap {
 }
 
 async function astar() {
+    if (!start || !end) {
+        console.error('Start or end node is not set');
+        return false;
+    }
+
+    console.log('Starting A* algorithm');
+    console.log('Start:', start);
+    console.log('End:', end);
+
     const openSet = new BinaryHeap(node => fScore.get(`${node.row},${node.col}`));
     const closedSet = new Set();
     const gScore = new Map();
@@ -172,9 +181,16 @@ async function astar() {
     gScore.set(`${start.row},${start.col}`, 0);
     fScore.set(`${start.row},${start.col}`, heuristic(start, end));
 
-    while (openSet.size() > 0) {
+    let iterations = 0;
+    const maxIterations = GRID_SIZE * GRID_SIZE; // Prevent infinite loop
+
+    while (openSet.size() > 0 && iterations < maxIterations) {
+        iterations++;
         const current = openSet.pop();
+        console.log('Current node:', current);
+
         if (current.row === end.row && current.col === end.col) {
+            console.log('Path found!');
             await reconstructPath(parent);
             return true;
         }
@@ -205,6 +221,7 @@ async function astar() {
         }
     }
 
+    console.log('No path found after', iterations, 'iterations');
     return false;
 }
 
@@ -217,7 +234,7 @@ function getNeighbors(cell) {
     for (const [dx, dy] of directions) {
         const newRow = cell.row + dx;
         const newCol = cell.col + dy;
-        if (isValidCell(newRow, newCol)) {
+        if (isValidCell(newRow, newCol) && !grid[newRow][newCol].element.classList.contains('wall')) {
             neighbors.push({ row: newRow, col: newCol });
         }
     }
