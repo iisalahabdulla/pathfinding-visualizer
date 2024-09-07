@@ -1,11 +1,21 @@
 async function bfs(updateVisited) {
+    if (!start || !end) {
+        console.error('Start or end point is not set');
+        return false;
+    }
+
     let visited = 0;
-    const queue = [start];
+    const queue = [grid[start.row][start.col]];
     const visitedSet = new Set();
     const parent = new Map();
 
     while (queue.length > 0) {
         const current = queue.shift();
+        if (!current) {
+            console.error('Current cell is undefined');
+            continue;
+        }
+
         const key = `${current.row},${current.col}`;
 
         if (current.row === end.row && current.col === end.col) {
@@ -15,13 +25,19 @@ async function bfs(updateVisited) {
 
         if (!visitedSet.has(key)) {
             visitedSet.add(key);
-            updateVisited(visited + 1);
-            if (current !== start && current !== end) {
-                grid[current.row][current.col].element.classList.add('visited');
+            visited++;
+            updateVisited(visited);
+            if (current !== grid[start.row][start.col] && current !== grid[end.row][end.col]) {
+                current.element.classList.add('visited');
                 await sleep(101 - document.getElementById('speedSlider').value);
             }
 
-            for (const neighbor of getNeighbors(current)) {
+            const neighbors = getNeighbors(current);
+            for (const neighbor of neighbors) {
+                if (!neighbor) {
+                    console.error('Neighbor is undefined');
+                    continue;
+                }
                 const neighborKey = `${neighbor.row},${neighbor.col}`;
                 if (!visitedSet.has(neighborKey)) {
                     queue.push(neighbor);
@@ -226,20 +242,36 @@ async function astar() {
 }
 
 function getNeighbors(cell) {
-    const neighbors = [];
-    const directions = document.getElementById('diagonalMoves').checked ?
-        [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]] :
-        [[-1, 0], [0, -1], [0, 1], [1, 0]];
-
-    for (const [dx, dy] of directions) {
-        const newRow = cell.row + dx;
-        const newCol = cell.col + dy;
-        if (isValidCell(newRow, newCol) && !grid[newRow][newCol].element.classList.contains('wall')) {
-            neighbors.push({ row: newRow, col: newCol });
-        }
+    if (!cell) {
+        console.error('Cell is undefined in getNeighbors');
+        return [];
     }
 
-    return neighbors;
+    const neighbors = [];
+    const { row, col } = cell;
+
+    // Helper function to safely add neighbors
+    const addNeighbor = (r, c) => {
+        if (grid[r] && grid[r][c]) {
+            neighbors.push(grid[r][c]);
+        }
+    };
+
+    // Orthogonal neighbors
+    addNeighbor(row - 1, col);
+    addNeighbor(row + 1, col);
+    addNeighbor(row, col - 1);
+    addNeighbor(row, col + 1);
+
+    // Diagonal neighbors
+    if (allowDiagonal) {
+        addNeighbor(row - 1, col - 1);
+        addNeighbor(row - 1, col + 1);
+        addNeighbor(row + 1, col - 1);
+        addNeighbor(row + 1, col + 1);
+    }
+
+    return neighbors.filter(neighbor => !neighbor.element.classList.contains('wall'));
 }
 
 function heuristic(a, b) {

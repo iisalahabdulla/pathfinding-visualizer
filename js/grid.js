@@ -33,12 +33,13 @@ function createGrid() {
             cell.addEventListener('touchmove', (e) => handleTouchMove(row, col, e), { passive: false });
             cell.addEventListener('touchend', handleTouchEnd);
             gridElement.appendChild(cell);
-            grid[row][col] = { element: cell, weight: 1 };
+            grid[row][col] = { element: cell, row: row, col: col, weight: 1 };
         }
     }
-
     document.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('touchend', handleTouchEnd);
+
+    console.log('Grid created:', grid);
 }
 
 // Add touch event handlers
