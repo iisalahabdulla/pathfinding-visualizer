@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('grid').addEventListener('contextmenu', (e) => e.preventDefault());
 
     updateAlgorithmInfo();
+
+    window.addEventListener('scroll', restoreGridState);
+    window.addEventListener('resize', restoreGridState);
 });
 
 let allowDiagonal = false; // Set to false by default
@@ -150,4 +153,16 @@ function getNeighbors(cell) {
     }
 
     return neighbors.filter(neighbor => !neighbor.element.classList.contains('wall'));
+}
+
+function clearVisualization() {
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col < GRID_SIZE; col++) {
+            const cell = grid[row][col];
+            cell.element.classList.remove('visited', 'path');
+            if (cell.element.dataset.state === 'visited' || cell.element.dataset.state === 'path') {
+                cell.element.dataset.state = 'empty';
+            }
+        }
+    }
 }

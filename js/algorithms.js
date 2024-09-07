@@ -29,6 +29,7 @@ async function bfs(updateVisited) {
             updateVisited(visited);
             if (current !== grid[start.row][start.col] && current !== grid[end.row][end.col]) {
                 current.element.classList.add('visited');
+                current.element.dataset.state = 'visited';
                 await sleep(101 - document.getElementById('speedSlider').value);
             }
 
@@ -305,6 +306,7 @@ async function reconstructPath(parent) {
     while (current && (current.row !== start.row || current.col !== start.col)) {
         if (current !== end) {
             grid[current.row][current.col].element.classList.add('path');
+            grid[current.row][current.col].element.dataset.state = 'path';
             pathLength++;
             await sleep(50);
         }
