@@ -26,6 +26,7 @@ function createGrid() {
             cell.className = 'cell';
             cell.dataset.row = row;
             cell.dataset.col = col;
+            cell.dataset.state = 'empty'; // Add this line
             cell.addEventListener('mousedown', (e) => handleMouseDown(row, col, e));
             cell.addEventListener('mouseover', () => handleMouseOver(row, col));
             cell.addEventListener('mouseup', handleMouseUp);
@@ -89,17 +90,26 @@ function handleMouseUp() {
 
 function handleCellClick(row, col) {
     const cell = grid[row][col];
+    if (!cell) {
+        console.error(`Invalid cell at row ${row}, col ${col}`);
+        return;
+    }
+
     if (cell.element.classList.contains('start')) {
         cell.element.classList.remove('start');
+        cell.element.dataset.state = 'empty';
         start = null;
     } else if (cell.element.classList.contains('end')) {
         cell.element.classList.remove('end');
+        cell.element.dataset.state = 'empty';
         end = null;
     } else if (!start) {
         cell.element.classList.add('start');
+        cell.element.dataset.state = 'start';
         start = { row, col };
     } else if (!end) {
         cell.element.classList.add('end');
+        cell.element.dataset.state = 'end';
         end = { row, col };
     } else {
         if (currentDrawMode === null) {
@@ -107,12 +117,17 @@ function handleCellClick(row, col) {
         }
         if (currentDrawMode === 'draw') {
             cell.element.classList.add('wall');
+            cell.element.dataset.state = 'wall';
             cell.weight = Infinity;
         } else {
             cell.element.classList.remove('wall', 'weighted');
+            cell.element.dataset.state = 'empty';
             cell.weight = 1;
         }
     }
+
+    console.log('Start:', start);
+    console.log('End:', end);
 }
 
 function weightCell(row, col) {
@@ -154,3 +169,24 @@ window.clearVisualization = clearVisualization;
 
 createGrid();
 window.addEventListener('resize', createGrid);
+
+function restoreGridState() {
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col < GRID_SIZE; col++) {
+            const cell = grid[row][col];
+            const state = cell.element.dataset.state;
+            cell.element.className = 'cell'; // Reset classes
+            if (state === 'start') {
+                cell.element.classList.add('start');
+            } else if (state === 'end') {
+                cell.element.classList.add('end');
+            } else if (state === 'wall') {
+                cell.element.classList.add('wall');
+            } else if (state === 'visited') {
+                cell.element.classList.add('visited');
+            } else if (state === 'path') {
+                cell.element.classList.add('path');
+            }
+        }
+    }
+}
