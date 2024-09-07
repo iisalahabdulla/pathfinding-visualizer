@@ -3,22 +3,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetBtn = document.getElementById('resetBtn');
     const generateMazeBtn = document.getElementById('generateMazeBtn');
     const algorithmSelect = document.getElementById('algorithmSelect');
+    const diagonalToggle = document.getElementById('diagonalToggle');
 
     startBtn.addEventListener('click', startPathfinding);
     resetBtn.addEventListener('click', resetGrid);
     generateMazeBtn.addEventListener('click', generateMaze);
     algorithmSelect.addEventListener('change', updateAlgorithmInfo);
+    diagonalToggle.addEventListener('change', (e) => {
+        console.log({e})
+        allowDiagonal = diagonalToggle.checked;
+    });
 
     document.getElementById('grid').addEventListener('contextmenu', (e) => e.preventDefault());
 
     updateAlgorithmInfo();
 });
 
+let allowDiagonal = false; // Set to false by default
+
 async function startPathfinding() {
     if (!start || !end) {
         alert('Please set both start and end points before starting the algorithm.');
         return;
     }
+
+    console.log('Starting pathfinding');
+    console.log('Start:', start);
+    console.log('End:', end);
+    console.log('Grid size:', GRID_SIZE);
 
     clearVisualization();
 
@@ -105,4 +117,37 @@ function clearGrid() {
 // Override the resetGrid function to use clearGrid instead of recreating the entire grid
 function resetGrid() {
     clearGrid();
+}
+
+function getNeighbors(cell) {
+    if (!cell) {
+        console.error('Cell is undefined in getNeighbors');
+        return [];
+    }
+
+    const neighbors = [];
+    const { row, col } = cell;
+
+    // Helper function to safely add neighbors
+    const addNeighbor = (r, c) => {
+        if (grid[r] && grid[r][c]) {
+            neighbors.push(grid[r][c]);
+        }
+    };
+
+    // Orthogonal neighbors
+    addNeighbor(row - 1, col);
+    addNeighbor(row + 1, col);
+    addNeighbor(row, col - 1);
+    addNeighbor(row, col + 1);
+
+    // Diagonal neighbors
+    if (allowDiagonal) {
+        addNeighbor(row - 1, col - 1);
+        addNeighbor(row - 1, col + 1);
+        addNeighbor(row + 1, col - 1);
+        addNeighbor(row + 1, col + 1);
+    }
+
+    return neighbors.filter(neighbor => !neighbor.element.classList.contains('wall'));
 }
