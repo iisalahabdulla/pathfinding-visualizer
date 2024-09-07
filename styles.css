@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+#grid {
+    display: grid;
+    grid-gap: 1px;
+    background-color: #ddd;
+    border: 1px solid #999;
+    margin-bottom: 20px;
+}
+
+.cell {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #ccc;
+    transition: all 0.1s ease-out;
+}
+
+.visited {
+    background-color: #64B5F6;
+}
+
+.path {
+    background-color: #FFEB3B;
+}
+
+.wall {
+    background-color: #37474F;
+}
+
+.start {
+    background-color: #4CAF50;
+}
+
+.end {
+    background-color: #F44336;
+}
+
+.weighted {
+    background-color: #FF9800;
+}
+
+#controls {
+    margin-bottom: 20px;
+}
+
+#controls > * {
+    margin-right: 10px;
+}
+
+#algorithmInfo {
+    max-width: 600px;
+    margin-top: 20px;
+}
