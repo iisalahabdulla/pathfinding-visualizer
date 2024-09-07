@@ -1,4 +1,4 @@
-const GRID_SIZE = 20;
+const GRID_SIZE = 20; // Changed back to 50x50 grid
 let grid = [];
 let start = null;
 let end = null;
@@ -7,7 +7,7 @@ let currentDrawMode = null;
 
 function createGrid() {
     const gridElement = document.getElementById('grid');
-    gridElement.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 25px)`;
+    gridElement.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 1.5rem)`; // 1.5rem = 24px
     gridElement.innerHTML = '';
     grid = [];
 

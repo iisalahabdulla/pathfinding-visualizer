@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .cell {
+    @apply w-6 h-6 border border-gray-300 transition-all duration-100 ease-out;
+  }
+  .visited {
+    @apply bg-blue-300;
+  }
+  .path {
+    @apply bg-yellow-300;
+  }
+  .wall {
+    @apply bg-gray-800;
+  }
+  .start {
+    @apply bg-green-500;
+  }
+  .end {
+    @apply bg-red-500;
+  }
+  .weighted {
+    @apply bg-orange-400;
+  }
+}
